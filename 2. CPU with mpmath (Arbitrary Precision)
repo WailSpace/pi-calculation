@@ -1,0 +1,38 @@
+import time
+import sys
+import mpmath
+from IPython.display import clear_output
+
+# Increase Python's integer string limit to avoid ValueError
+sys.set_int_max_str_digits(10**6)  # Allow up to 1 million digits
+
+def calculate_pi():
+    """Efficient π calculation with controlled output in Jupyter."""
+    precision = 100000  # Start with 100,000 decimal places
+    iteration = 1
+
+    try:
+        while True:  # Run indefinitely
+            start_time = time.time()
+            
+            # Set the precision and compute π
+            mpmath.mp.dps = precision
+            pi_approx = mpmath.pi  # Compute π
+            
+            elapsed_time = time.time() - start_time
+            
+            # Clear previous output instead of spamming the console
+            clear_output(wait=True)
+            print(f"Iteration: {iteration:,}, Precision: {precision:,} digits, Time: {elapsed_time:.4f} sec")
+            
+            # Gradually increase the number of digits (e.g., +100,000)
+            precision += 100000
+            iteration += 1
+            
+    except KeyboardInterrupt:
+        # Handle interruption (Ctrl+C) and print the final π value
+        print(f"\nProcess interrupted. Final calculated π value:")
+        print(f"{mpmath.nstr(pi_approx, precision)}")  # Print the full π value
+
+# Run the optimized calculation
+calculate_pi()
